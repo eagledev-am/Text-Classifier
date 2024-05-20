@@ -19,25 +19,6 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 
 
-def read_data(filepath):
-    data = {'text': [], 'label': []}
-     
-
-        # Open each file and read its content
-    with open(filepath, encoding='utf-8') as file:
-        lines = file.readlines() 
-    
-    # Extract emotional states and labels from each line
-    for line in lines:
-        parts = line.strip().split(':')
-        parts = [remove_punctuation(part).lower() for part in parts]
-        if len(parts) == 2:
-            text, label = parts
-            data['text'].append(text)
-            data['label'].append(label)
-    print(data['text'][:5])        
-    return data
-
 def read_data_csv(filepath):
     data = {'text': [], 'label': []}
     # Read data From csv
@@ -50,11 +31,6 @@ def read_data_csv(filepath):
     print(data['text'][:5])
     print(data['label'][:5])
     return data
-
-def remove_punctuation(text):
-    # Remove punctuation characters
-    text = text.translate(str.maketrans('', '', string.punctuation))
-    return text
 
 def preprocess_text(text):
     # Tokenization
