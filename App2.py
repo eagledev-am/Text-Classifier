@@ -3,6 +3,9 @@ from tkinter import messagebox
 import pickle
 import nltk
 from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+import string
 
 # Ensure NLTK resources are downloaded
 nltk.download('punkt')
@@ -16,10 +19,30 @@ with open('vectorizer.pkl', 'rb') as vectorizer_file:
 
 # Preprocessing function
 def preprocess_text(text):
+    # Tokenization
+    tokens = nltk.word_tokenize(text)
+    
+    # Lowercasing
+    tokens = [token.lower() for token in tokens]
+    
+    # Removing punctuation
+    tokens = [token for token in tokens if token not in string.punctuation]
+    
+    # Removing stopwords
+    stop_words = set(stopwords.words('english'))
+    tokens = [token for token in tokens if token not in stop_words]
+
     stemmer = PorterStemmer()
-    tokens = nltk.word_tokenize(text.lower())  # Lowercasing and tokenization
-    stemmed_tokens = [stemmer.stem(token) for token in tokens]
-    return ' '.join(stemmed_tokens)  # Joining back into a single string
+    tokens = [stemmer.stem(token) for token in tokens]
+    
+    # Lemmatization
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(token) for token in tokens]
+    
+    # Join tokens back into a single string
+    preprocessed_text = ' '.join(tokens)
+    
+    return preprocessed_text
 
 # Function to predict sentiment
 def predict_sentiment():
